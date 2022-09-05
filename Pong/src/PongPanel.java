@@ -100,6 +100,8 @@ import java.awt.BasicStroke;
                   moveObject(ball);            // Move ball
 
                   checkWallBounce();            // Check for wall bounce
+                  
+                  checkPaddleBounce();
 
                   break;
 
@@ -279,6 +281,21 @@ import java.awt.BasicStroke;
        
        private void resetBall() {
 		ball.resetToInitialPosition();
+       }
+       
+       private void checkPaddleBounce() {
+
+    	      if(ball.getxVelocity() < 0 && ball.getRectangle().intersects(paddle1.getRectangle())) {
+
+    	          ball.setxVelocity(BALL_MOVEMENT_SPEED);
+
+    	      }
+
+    	      if(ball.getxVelocity() > 0 && ball.getRectangle().intersects(paddle2.getRectangle())) {
+
+    	          ball.setxVelocity(-BALL_MOVEMENT_SPEED);
+
+    	      }
        }
 
   }
