@@ -81,43 +81,45 @@ import java.awt.BasicStroke;
 
        private void update() {
 
-           switch(gameState) {
+    	   switch(gameState) {
 
-               case Initialising: {
+           case Initialising: {
 
-                   createObjects();
+               createObjects();
 
-                   gameState = GameState.Playing;
+               gameState = GameState.Playing;
 
-                   ball.setxVelocity(BALL_MOVEMENT_SPEED);
+               ball.setxVelocity(BALL_MOVEMENT_SPEED);
 
-                   ball.setyVelocity(BALL_MOVEMENT_SPEED);
+               ball.setyVelocity(BALL_MOVEMENT_SPEED);
 
-                   break;
+               break;
 
-              }
+           }
 
-              case Playing: {
-            	  
-            	  moveObject(paddle1);
-            	  
-            	  moveObject(paddle2);
+          case Playing: {
 
-                  moveObject(ball);            // Move ball
+              moveObject(paddle1);
 
-                  checkWallBounce();            // Check for wall bounce
-                  
-                  checkPaddleBounce();
+              moveObject(paddle2);
 
-                  break;
+              moveObject(ball);    // Move ball
 
-              }
+              checkWallBounce();    // Check for wall bounce
 
-              case GameOver: {
+              checkPaddleBounce();// Check for paddle bounce
 
-                  break;
+              checkWin();        // Check if the game has been won
 
-              }
+              break;
+
+          }
+
+          case GameOver: {
+
+              break;
+
+          }
 
           }
 
@@ -262,17 +264,25 @@ import java.awt.BasicStroke;
        
        private void checkWallBounce() {
 
-           if(ball.getxPosition() <= 0) {
+    	   if(ball.getxPosition() <= 0) {
 
                // Hit left side of screen
 
-        	   resetBall();
+               ball.setxVelocity(-ball.getxVelocity());
+
+               addScore(Player.Two);
+
+               resetBall();
 
            } else if(ball.getxPosition() >= getWidth() - ball.getWidth()) {
 
                // Hit right side of screen
 
-        	   resetBall();
+               ball.setxVelocity(-ball.getxVelocity());
+
+               addScore(Player.One);
+
+               resetBall();
 
            }
 
@@ -302,6 +312,40 @@ import java.awt.BasicStroke;
     	          ball.setxVelocity(-BALL_MOVEMENT_SPEED);
 
     	      }
+       }
+       
+       private void checkWin() {
+
+           if(player1Score >= POINTS_TO_WIN) {
+
+               gameWinner = Player.One;
+
+               gameState = GameState.GameOver;
+
+           } else if(player2Score >= POINTS_TO_WIN) {
+
+               gameWinner = Player.Two;
+
+               gameState = GameState.GameOver;
+
+           }
+
+       }
+
+       
+
+       private void addScore(Player player) {
+
+           if(player == Player.One) {
+
+               player1Score++;
+
+           } else if(player == Player.Two) {
+
+               player2Score++;
+
+           }
+
        }
 
   }
